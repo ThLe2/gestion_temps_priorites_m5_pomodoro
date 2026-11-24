@@ -1,0 +1,85 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Minuteur Pomodoro</title><style>
+:root{--fonce:#5E1349;--prune:#8C1E70;--clair:#F4E6EE;--rose:#C77BAA;--trame:#E8DCE5;--fond:#FAF6F8;--texte:#3C3C3C;--gris:#8A7A85;--ok:#2E7D4F;--ko:#B3261E;--bleu:#2F6DB3;--vert:#3C8D5A;--orange:#C77700}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--texte);background:var(--fond);font-size:15px;line-height:1.45}
+header{background:var(--fonce);color:#fff;padding:16px 22px}header .k{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#EAD3E3;font-weight:700}header h1{margin:4px 0 0;font-size:22px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.contexte{background:#fff;border-left:5px solid var(--prune);padding:12px 16px;margin-bottom:14px}
+.contexte h2{margin:0 0 6px;font-size:17px;color:var(--fonce)}.contexte ul{margin:6px 0 0;padding-left:20px}
+.etapes{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}.etapes span{padding:6px 12px;border-radius:16px;background:#fff;border:1px solid var(--trame);font-size:13px;color:var(--gris)}
+.etapes span.on{background:var(--prune);color:#fff;border-color:var(--prune)}.etapes span.fait{background:var(--clair);color:var(--fonce)}
+.grille{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:860px){.grille{grid-template-columns:1fr}}
+.panneau{background:#fff;border:1px solid var(--trame);border-radius:8px;padding:12px}
+.panneau h3{margin:0 0 10px;font-size:16px;color:var(--fonce)}
+.tache{border:1px solid var(--trame);border-radius:8px;padding:10px;margin-bottom:8px;background:#fff}
+.tache.placee{border-color:var(--prune);background:var(--clair)}.tache.fixe{background:#f3f0f2}
+.tache .nom{font-weight:700;color:var(--fonce)}.tache .nom input{width:100%;padding:6px;border:1px solid var(--trame);border-radius:4px;font:inherit}
+.ligne{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;font-size:14px}
+select,button,input[type=text]{font:inherit}select{padding:5px;border:1px solid #cdbfc8;border-radius:4px;background:#fff}
+button{cursor:pointer;border:0;border-radius:6px;padding:7px 13px;background:var(--prune);color:#fff}
+button.sec{background:#fff;color:var(--prune);border:1px solid var(--prune)}button:disabled,select:disabled,input:disabled{opacity:.55;cursor:not-allowed}
+.badge{font-size:12px;padding:2px 8px;border-radius:10px;background:var(--trame);color:var(--fonce)}
+.prio{font-size:13px;color:var(--fonce)}
+.jour{position:relative;margin-left:52px;border-left:2px solid var(--trame)}
+.h{position:absolute;left:-52px;width:calc(100% + 52px);border-top:1px solid var(--trame);font-size:12px;color:var(--gris)}
+.h span{position:relative;top:-8px;background:#fff;padding-right:4px}
+.ev{position:absolute;left:6px;right:6px;border-radius:6px;padding:3px 8px;font-size:12.5px;color:#fff;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.ev b{display:block;font-size:13px}.ev.c-tache{background:var(--prune)}.ev.c-casting{background:var(--bleu)}.ev.c-autre{background:var(--vert)}.ev.c-pause{background:#9a8c95}.ev.c-imprevu{background:var(--orange)}.ev.c-fixe{background:#7a6a74}
+.ev.chev{outline:3px solid var(--ko)}.ev .cloche{float:right}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.verif{background:#fff;border:1px solid var(--trame);border-radius:8px;padding:12px 16px}
+.verif li{margin:5px 0;list-style:none;padding-left:4px}.verif ul{padding-left:0;margin:6px 0}
+.ok{color:var(--ok)}.ko{color:var(--ko)}
+.bilan{background:var(--clair);border:2px solid var(--prune);border-radius:8px;padding:12px 16px;margin-top:12px}
+.reporte{font-size:13px;color:var(--gris);margin-top:6px}
+footer{text-align:center;font-size:12px;color:var(--gris);padding:16px}
+
+.col{background:#f3eef1;border-radius:8px;padding:10px;min-height:220px}.col h4{margin:0 0 8px;color:var(--fonce)}.kb{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:760px){.kb{grid-template-columns:1fr}}
+.carte{background:#fff;border-radius:6px;padding:8px 10px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.12);font-size:14px}.carte .bt{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}.carte .bt button{padding:3px 8px;font-size:12px}
+.etq{display:inline-block;background:var(--ko);color:#fff;font-size:11px;border-radius:8px;padding:1px 7px;margin-bottom:4px}.ech{font-size:12px;color:var(--fonce)}
+.champ{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.champ input[type=text]{flex:1;min-width:220px;padding:7px;border:1px solid #cdbfc8;border-radius:4px}
+.todo li{list-style:none;margin:6px 0}.todo{padding-left:0}.fait{text-decoration:line-through;color:var(--gris)}.note{background:#FFF8E1;border-left:4px solid #E0B000;padding:6px 10px;margin:6px 0;font-size:14px}
+.chrono{font-size:56px;font-weight:700;color:var(--fonce);text-align:center;font-variant-numeric:tabular-nums;margin:6px 0}
+.chrono.alerte{color:var(--ko)}textarea{width:100%;min-height:220px;font:inherit;padding:10px;border:1px solid #cdbfc8;border-radius:6px}
+.cpt{font-size:13px;color:var(--gris);text-align:right}.q{border-bottom:1px solid var(--trame);padding:10px 0}.q .opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.q .opts label{border:1px solid var(--trame);border-radius:16px;padding:4px 12px;cursor:pointer;font-size:14px;background:#fff}.q .opts input{margin-right:4px}
+.barre{height:16px;background:var(--trame);border-radius:8px;overflow:hidden}.barre div{height:100%;background:var(--prune)}
+.axe{margin:10px 0}.axe .l{display:flex;justify-content:space-between;font-weight:700;color:var(--fonce);margin-bottom:3px}
+.cmp td,.cmp th{padding:8px;border:1px solid var(--trame)}.cmp{border-collapse:collapse;width:100%;background:#fff}.cmp th{background:var(--fonce);color:#fff}
+label.bl{display:block;margin:8px 0 3px;font-weight:700;color:var(--fonce);font-size:14px}.f input,.f select{width:100%;padding:7px;border:1px solid #cdbfc8;border-radius:4px;font:inherit}</style><script src="jspdf.umd.min.js"></script><script src="justif.js"></script></head><body>
+<header><div class="k">Gestion du temps et des priorités · Module 5</div><h1>Minuteur Pomodoro</h1></header><main><div class="etapes" id="etapes"></div><div class="contexte"><h2>Un cycle Pomodoro, en accéléré</h2><p>Un vrai pomodoro dure 25 minutes. Ici, vous allez vivre un <b>cycle court de 5 minutes</b>, suivi d'<b>une minute de pause</b>.</p>
+<ul><li>Choisissez <b>5 petites tâches</b> dans la liste (chacune prend environ 30 secondes).</li><li>Lancez le minuteur et accomplissez-les vraiment, sans rien faire d'autre ; cochez chaque tâche terminée.</li>
+<li>Si une autre idée vous vient pendant le cycle, notez-la dans la zone prévue au lieu de vous interrompre.</li><li>À la sonnerie, faites la pause guidée, puis répondez aux questions du bilan.</li></ul></div>
+<div class="grille"><div class="panneau"><h3 id="tLst">1. Choisissez 5 tâches</h3><div id="lst"></div></div>
+<div class="panneau"><h3>Minuteur</h3><div class="chrono" id="chrono">5:00</div><div class="actions" style="justify-content:center"><button id="go">Lancer le pomodoro</button></div>
+<label class="bl" for="idee">Une idée qui vous traverse l'esprit ? Notez-la ici :</label><textarea id="idee" style="min-height:70px" placeholder="À traiter pendant la pause…"></textarea>
+<div id="bilan"></div></div></div><div class="actions"><button class="sec" id="btnReset">Recommencer l'exercice</button></div><div id="retour"></div></main>
+<footer>TMK Performances - N° Siret : 49841924100027 - Code NAF : 8559A</footer><script>
+const $=s=>document.querySelector(s);const RAPIDE=new URLSearchParams(location.search).has('rapide');
+const mmss=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+function stocker(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}function lire(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+const TACHES=['Boire un verre d\'eau','Envoyer un message rapide à un proche','Fermer les onglets inutiles','Prendre trois grandes respirations','Se lever et s\'étirer','Jeter un papier qui traîne','Éteindre un appareil en veille','Ranger un objet à sa place','Vérifier son agenda du jour','Nettoyer l\'écran de son téléphone','Noter un rappel sur un post-it','Définir la tâche importante du jour','Supprimer un mail promotionnel','Échanger un mot gentil avec quelqu\'un','Visualiser l\'objectif du jour'];
+let choix=[],faites=[],phase='choix',t=null,reste=0;
+function init(){JUSTIF.vider();clearInterval(t);choix=[];faites=[];phase='choix';$('#chrono').textContent='5:00';$('#chrono').classList.remove('alerte');$('#go').disabled=false;$('#go').textContent='Lancer le pomodoro';$('#idee').value='';$('#bilan').innerHTML='';$('#retour').innerHTML='';rendre();}
+function rendre(){$('#etapes').innerHTML=['Choisir','Travailler 5 min','Pause 1 min','Bilan'].map((e,i)=>`<span class="${['choix','travail','pause','bilan'].indexOf(phase)===i?'on':(['choix','travail','pause','bilan'].indexOf(phase)>i?'fait':'')}">${i+1}. ${e}</span>`).join('');
+ $('#tLst').textContent=phase==='choix'?`1. Choisissez 5 tâches (${choix.length}/5)`:'Vos 5 tâches : cochez-les une fois faites';
+ const liste=phase==='choix'?TACHES.map((x,i)=>i):choix;
+ $('#lst').innerHTML=liste.map(i=>`<div class="tache ${phase==='choix'&&choix.includes(i)||faites.includes(i)?'placee':''}"><label><input type="checkbox" data-i="${i}" ${(phase==='choix'?choix:faites).includes(i)?'checked':''} ${phase!=='choix'&&phase!=='travail'?'disabled':''}> ${TACHES[i]}</label></div>`).join('');
+ document.querySelectorAll('#lst input').forEach(c=>c.onchange=()=>{const i=+c.dataset.i,L=phase==='choix'?choix:faites;if(c.checked){if(phase==='choix'&&choix.length>=5){c.checked=false;alert('Cinq tâches suffisent pour ce cycle.');return;}L.push(i);}else L.splice(L.indexOf(i),1);rendre();});
+ $('#idee').disabled=phase==='bilan';}
+function minuteur(sec,fin){reste=sec;const tick=()=>{$('#chrono').textContent=mmss(reste);$('#chrono').classList.toggle('alerte',reste<=10);if(reste<=0){clearInterval(t);fin();}reste--;};tick();t=setInterval(tick,RAPIDE?20:1000);}
+$('#go').onclick=()=>{if(choix.length<5){alert('Choisissez d\'abord 5 tâches.');return;}phase='travail';$('#go').disabled=true;$('#go').textContent='Pomodoro en cours…';rendre();
+ minuteur(300,()=>{phase='pause';rendre();$('#go').textContent='Pause : levez-vous, respirez';$('#bilan').innerHTML='<div class="bilan"><b>Ding !</b> Le pomodoro est terminé. Pendant une minute, éloignez-vous de l\'écran : levez-vous, étirez-vous, respirez lentement.</div>';
+ minuteur(60,()=>{phase='bilan';rendre();$('#go').textContent='Cycle terminé';afficherBilan();});});};
+function afficherBilan(){$('#bilan').innerHTML=`<div class="bilan"><b>Bilan du cycle</b><p>Tâches terminées : <b>${faites.length} sur 5</b>.</p>
+ <div class="q">Comment évaluez-vous votre concentration pendant le cycle ?<div class="opts">${['Très dispersée','Plutôt dispersée','Correcte','Bonne','Excellente'].map((x,i)=>`<label><input type="radio" name="conc" value="${i+1}">${x}</label>`).join('')}</div></div>
+ <div class="q">Avez-vous été tenté(e) de faire autre chose pendant le cycle ?<div class="opts"><label><input type="radio" name="tent" value="1">Oui</label><label><input type="radio" name="tent" value="0">Non</label></div></div>
+ <div class="actions"><button id="fin">Valider mon bilan</button></div></div>`;
+ $('#fin').onclick=()=>{const c=document.querySelector('[name=conc]:checked'),te=document.querySelector('[name=tent]:checked');if(!c||!te){alert('Répondez aux deux questions.');return;}
+  document.querySelectorAll('#bilan input').forEach(i=>i.disabled=true);$('#fin').disabled=true;$('#fin').textContent='Atelier validé';
+  const idee=$('#idee').value.trim();
+  $('#retour').innerHTML=`<div class="bilan"><b>Ce qu'il faut retenir.</b> ${faites.length===5?'Cinq tâches en cinq minutes : un temps court et protégé suffit à avancer.':'Toutes les tâches ne sont pas faites : c\'est normal, le minuteur rend visible le temps réel de chaque action.'} ${te.value==='1'?(idee?'Vous avez noté une idée au lieu de vous interrompre : c\'est exactement le bon réflexe.':'La tentation de faire autre chose est fréquente : la prochaine fois, notez l\'idée sur une feuille et traitez-la à la pause.'):'Vous êtes resté(e) sur votre tâche : c\'est tout l\'intérêt du pomodoro.'} Et la pause compte autant que le travail : c\'est elle qui permet d\'enchaîner les cycles.</div>`;
+  JUSTIF.sections=[{titre:'Le cycle Pomodoro',lignes:['Tâches choisies ('+faites.length+' terminée(s) sur 5) :',...choix.map(i=>(faites.includes(i)?'Faite : ':'Non faite : ')+TACHES[i]),'Idée notée pendant le cycle : '+(idee||'aucune'),'Concentration : '+['Très dispersée','Plutôt dispersée','Correcte','Bonne','Excellente'][c.value-1]+' ; tentation de faire autre chose : '+(te.value==='1'?'oui':'non')+'.'],bilan:$('#retour').innerHTML}];JUSTIF.bouton('#retour');};}
+$('#btnReset').onclick=()=>{if(confirm('Recommencer tout l\'exercice ?'))init();};init();
+</script></body></html>
